@@ -44,7 +44,7 @@ public class B2A2 {
         System.out.println("Comparisons: " + compare_cnt);
 
         // make sure that you have implemented and compiled B2A1 (run: javac B2A1.java)
-        assert B2A1.isSorted(numbers);
+        assert B2A1.isSorted(numbers) : "Array ist nicht sortiert";
     }
 
     /**
