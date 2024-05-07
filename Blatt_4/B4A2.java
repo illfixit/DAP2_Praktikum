@@ -21,46 +21,20 @@ class SolutionB4A2New {
     public static void updatePremutation(int[] numbers, int[] counters) {
         /**********************************************************/
         /****                Langaufgabe 4.2:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
         /**********************************************************/
-        int count = 0;
-        // for(int i = 0; i < numbers.length; i++){
-        //     System.out.println(i);
-        //     if(i < numbers.length){
-        //         if(counters[i] < i){
-        //             System.out.println(counters[i] + " ist kleiner als " + i);
-        //             if(i % 2 == 0){
-        //                 swap(numbers, 0, i);
-        //             } else {
-        //                 swap(numbers, i, counters[i]);
-                        
-        //             }
-        //             counters[i]++;
-        //             return;
-        //         } else if(counters[i] >= i){
-        //             counters[i] = 0;
-        //             i = 0;
-        //         }
-        //     }
-        //     System.out.println(i + " " + counters[i]);
-        //     count++;
-        // }
-        int i = 1;
-        while (i < numbers.length){
+        int i = 0;
+        while (i < numbers.length){                     //solange Index im Array
             if(counters[i] < i){
-                if(i % 2 == 0){
+                if(i % 2 == 0){                         //wenn i gerade: vertausche 0 und i
                     swap(numbers, 0, i);
                 } else {
-                    swap(numbers, i, counters[i]);
+                    swap(numbers, i, counters[i]);      //wenn ungerade: vertausche i und counters[i]
                 }
                 counters[i]++;
-                return;
-                //System.out.println(Arrays.toString(numbers));
+                return;                                 //Permutation ist fertig
             } else {
-                counters[i] = 0;
-                i++;
+                counters[i] = 0;                        //counters reset
+                i++;                                    //überprüfe den nächsten Index
             }
        
         }
@@ -70,24 +44,18 @@ class SolutionB4A2New {
     public static void shufflePermutation(int[] numbers) {
         /**********************************************************/
         /****                Langaufgabe 4.2:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
         /**********************************************************/
         int rnd;
-        int temp;
         for(int i = 0; i < numbers.length; i++){
-            rnd = ThreadLocalRandom.current().nextInt(numbers.length);
-            temp = numbers[i];
-            numbers[i] = numbers[rnd];
-            numbers[rnd] = temp;
+            rnd = ThreadLocalRandom.current().nextInt(numbers.length);  //random Index
+            swap(numbers, i, rnd);                                      //vertausche i mit rnd
         }
 
     }
 
+    //Übernommen von vorherigem Blatt
     public static int insertionSort(int[] permutation) {
         int swap_cnt = 0;
-        
 
         for (int j = 1; j < permutation.length; j++) {
             int key = permutation[j];
@@ -104,53 +72,49 @@ class SolutionB4A2New {
             permutation[i + 1] = key;
         }
 
-        return swap_cnt;
+        return swap_cnt;                          //return Anzahl der swaps, um Durschnitt zuberechnen
     }
 
 
     public static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        int k = Integer.parseInt(args[1]);
+        int n = Integer.parseInt(args[0]);  //Länge des Arrays
+        int k = Integer.parseInt(args[1]);  //Anzahl der Permutationen die durch shuffelPermutation erzeugt werden sollen
 
 
-        int nFact = fact(n);
+        int nFact = fact(n);            //Anzahl der Permutationen 
 
-        int[] numbers = new int[n];
+        int[] numbers = new int[n];     //Initalisierung des zu sortierenden Arrays
         for (int i = 0; i < n; i++) {
             numbers[i] = i + 1;
         }
-        int[] counters = new int[n];
+        int[] counters = new int[n];    //Initialisierung des counters Arrays, für den updatePermutation-Algorithmus
         for (int i = 0; i < n; i++){
             counters[i] = 0;
         }
         
-        double average = 0;
-        int biggest = -1;
-        int swaps = 0;
-        if(n <= 10){
-            for(int i = 0; i < nFact; i++){
-                swaps = insertionSort(numbers.clone());
-                average += swaps;
-                if(biggest == -1 || biggest < swaps){
+        double average = 0;             //Durschnitt
+        int biggest = -1;               //Schlimmster Fall, muss mit -1 initialisiert werden, damit der schlimmste Fall richtig verglichen werden kann
+        int swaps = 0;                  //Zwischenspeicherung der Anzahl der swaps
+        if(n <= 10){                    //wenn das Array kleiner gleich 10 Elemente hat
+            for(int i = 0; i < nFact; i++){                 //Alle Permutationen
+                swaps = insertionSort(numbers.clone());     //sortieren des Arrays
+                average += swaps;                           //Aufaddieren der Swaps
+                if(biggest == -1 || biggest < swaps){       //Vergleich für den schlimmsten Fall  
                     biggest = swaps;
                 } 
                 
-                // System.out.println(Arrays.toString(numbers));
-                // System.out.println("Swaps: " + swaps + ". Biggest: " + biggest + ". Average: " + average);
-                updatePremutation(numbers, counters);
+                updatePremutation(numbers, counters);       //Erzeuge die nächste Permutation
             }
-            average = average / nFact;
-            average = round(average, 1);
+            average = average / nFact;                      //Berechnung des arithmetischen Mittels
+            average = round(average, 1);          //Runden auf eine Nachkommastelle
+            //Ausgabe
             System.out.println("Durschnittliche Anzahl von Verschiebungen: " + average);
             System.out.println("Schlimmste Anzahl von Verschiebungen: " + biggest);
-        } else {
-            for(int i = 0; i < k; i++){
+        } else {                                            //wenn length länger als 10
+            for(int i = 0; i < k; i++){                     //erzeuge k Permutationen
                 shufflePermutation(numbers);
                 swaps = insertionSort(numbers.clone());
                 average += swaps;
-                if(biggest == -1 || biggest < swaps){
-                    biggest = swaps;
-                } 
             }
             average = average / k-1;
             average = round(average, 1);
@@ -160,12 +124,9 @@ class SolutionB4A2New {
         
         /**********************************************************/
         /****                Langaufgabe 4.2:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
         /**********************************************************/
     
-
+    //Hilfsfunktion fürs Runden von Zahlen auf percision-Nachkommastellen
     private static double round (double value, int precision) {
         int scale = (int) Math.pow(10, precision);
         return (double) Math.round(value * scale) / scale;
