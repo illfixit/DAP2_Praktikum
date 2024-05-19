@@ -2,55 +2,66 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 class B6A1 {
+    // sehr einfacher Algorithmus der vergleciht in for Schleife
+    // alle Elemente mit min und gibt das kleinste Element zurück
     public static int getMin(int[] data) {
-        /**********************************************************/
-        /****                Langaufgabe 6.1:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
-        /**********************************************************/
-        return 0;
-
+        int min = data[0];
+        for (int i = 1; i < data.length; i++) {
+            if (data[i] < min) {
+                min = data[i];
+            }
+        }
+        return min;
     }
 
+    // ähnlich für max
     public static int getMax(int[] data) {
-        /**********************************************************/
-        /****                Langaufgabe 6.1:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
-        /**********************************************************/
-        return 0;
-
+        int max = data[0];
+        for (int i = 1; i < data.length; i++) {
+            if (data[i] > max) {
+                max = data[i];
+            }
+        }
+        return max;
     }
 
+    // Schreiben Sie eine Methode count, die ein Array data von Ganzzahlen sowie
+    // zwei zusätzliche Schlüssel min und max erhält. Ausgabe der Methode ist ein
+    // Array C der Länge max−min+1,sodass C[i] die Anzahl der Vorkommen
+    // von i + min in der Liste A ist.
     public static int[] count(int[] data, int min, int max) {
+        // wie in der Aufgabe beschrieben, wird ein Array C der Länge max - min + 1
+        // erstellt
 
-        int C[] = new int[max - min + 1];
+        // HINT: https://www.javainuse.com/java/countingsort
 
-        /**********************************************************/
-        /****                Langaufgabe 6.1:                  ****/
-
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
-
-        /**********************************************************/
+        int[] C = new int[max - min + 1];
+        for (int i = 0; i < data.length; i++) {
+            C[data[i] - min]++;
+        }
         return C;
     }
 
     public static int[] countingSort(int[] data) {
-        int B[] = new int[data.length];
-        /**********************************************************/
-        /****                Langaufgabe 6.1:                  ****/
+        int min = getMin(data);
+        int max = getMax(data);
+        int[] count = count(data, min, max);
 
-        // Ersetzen Sie diese Kommentarzeile durch Ihren Code!
+        int[] B = new int[data.length];
+        int index = 0;
 
-        /**********************************************************/
+        for (int i = max - min; i >= 0; i--) {
+            while (count[i] > 0) {
+                B[index++] = i + min;
+                count[i]--;
+            }
+        }
+
         return B;
     }
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        // Initialize the scanner and read the amount of expected integers
         int n = input.nextInt();
         assert n > 0 : "Error: length of the Input Array < 1";
         int[] arr = new int[n];
@@ -59,15 +70,23 @@ class B6A1 {
             arr[i] = input.nextInt();
         }
         input.close();
+
+        // für Testzwecke
+        // int[] arr = { 1, 2, 2, 3, 4, 4 };
+
         System.out.print("Input Array: ");
         System.out.println(Arrays.toString(arr));
+
         int min = getMin(arr);
         System.out.printf("The minimum value: %d\n", min);
+
         int max = getMax(arr);
-        System.out.printf("The minimum value: %d\n", max);
+        System.out.printf("The maximum value: %d\n", max);
+
         int[] count = count(arr, min, max);
         System.out.print("Frequencies: ");
         System.out.println(Arrays.toString(count));
+
         int[] output = countingSort(arr);
         System.out.print("After sorting: ");
         System.out.println(Arrays.toString(output));
