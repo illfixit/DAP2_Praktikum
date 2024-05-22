@@ -32,10 +32,9 @@ class B6A1 {
     public static int[] count(int[] data, int min, int max) {
         // wie in der Aufgabe beschrieben, wird ein Array C der Länge max - min + 1
         // erstellt
-
-        // HINT: https://www.javainuse.com/java/countingsort
-
         int[] C = new int[max - min + 1];
+        // es gibt nur eine Schleife wo wir eine einfache Operation machen
+        // deswegen ist die Laufzeit O(n)
         for (int i = 0; i < data.length; i++) {
             C[data[i] - min]++;
         }
@@ -43,6 +42,7 @@ class B6A1 {
     }
 
     public static int[] countingSort(int[] data) {
+        // mit Hilfe der Methoden getMin, getMax und count wird das Array sortiert
         int min = getMin(data);
         int max = getMax(data);
         int[] count = count(data, min, max);
@@ -50,6 +50,8 @@ class B6A1 {
         int[] B = new int[data.length];
         int index = 0;
 
+        // das Array B wird erstellt und mit Hilfe von count sortiert
+        // laut dem counting Sort Algorithmus gehen wir von recht nach links
         for (int i = max - min; i >= 0; i--) {
             while (count[i] > 0) {
                 B[index++] = i + min;
