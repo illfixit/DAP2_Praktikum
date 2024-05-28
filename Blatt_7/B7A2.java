@@ -88,30 +88,28 @@ class B7A2<K, V> {
         // Initialize the scanner and read the amount of expected integers
         int n = input.nextInt();
         assert n > 0 : "Error: length of the Input Array < 1";
-
-        B7A2<Integer, String> table = new B7A2<>(n);
-
+        
+        B7A2<String, String> table = new B7A2<>(n);
+        
         String command;
         while (true) {
             System.out.print("Enter command (i to insert, g to get, r to remove, q to quit): ");
             command = input.next();
             if (command.equals("i")) {
-                int key = input.nextInt();
+                String key = input.next();
                 String value = input.next();
                 table.insert(key, value);
                 System.out.println("Inserted (" + key + ", " + value + ")");
             } else if (command.equals("g")) {
-                // wir haben nextInt hier, das bedeutet, dass wir einen Integer erwarten und
-                // nicht einen beliebigen Schlüssel
-                int key = input.nextInt();
+                String key = input.next();
                 String result = table.get(key);
                 if (result != null) {
                     System.out.println("Key: " + key + ", Value: " + result);
                 } else {
                     System.out.println("Key not found.");
-                }
+                    }
             } else if (command.equals("r")) {
-                int key = input.nextInt();
+                String key = input.next();
                 boolean removed = table.remove(key);
                 System.out.println("Key " + key + " removed: " + removed);
             } else if (command.equals("q")) {
@@ -119,7 +117,7 @@ class B7A2<K, V> {
             } else {
                 System.out.println("Invalid command. Please try again.");
             }
+            }
+            input.close();
         }
-        input.close();
-    }
 }
