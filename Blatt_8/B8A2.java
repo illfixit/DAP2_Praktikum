@@ -34,6 +34,16 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+		Node newNode = new Node(value);
+		if(root == null){
+			root = newNode;
+			root.color = BLACK;
+			System.out.println("Fuege " + value + " in den Rot-Schwarz-Baum ein.");
+		} else {
+			insert(root, newNode);
+			fixInsert(newNode);
+			System.out.println("Fuege " + value + " in den Rot-Schwarz-Baum ein.");
+		}
 	}
 
 	// Hilfsmethode zum Einfügen eines neuen Knotens
@@ -44,6 +54,23 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+		if(newNode.value < root.value) {
+			if(root.left == null) {
+				root.left = newNode;
+				newNode.parent = root;
+			} else {
+				insert(root.left, newNode);
+			}
+		} else {
+			if(root.right == null) {
+				root.right = newNode;
+				newNode.parent = root;
+			} else {
+				insert(root.right, newNode);
+			}
+		}
+		
+		
 	}
 
 	// Balancierung nach dem Einfügen
@@ -54,6 +81,45 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+	
+
+		while(node != root  && node.parent.color == RED){
+
+			if(node.parent == node.parent.parent.left){
+				Node aunt = node.parent.parent.right;
+				if(aunt != null && aunt.color == RED){
+					node.parent.parent.color = RED;
+					node.parent.color = BLACK;
+					aunt.color = BLACK;
+					node = node.parent.parent;
+				} else {
+					if(node == node.parent.right){
+						node = node.parent;
+						rotateLeft(node);
+					}
+					node.parent.color = BLACK;
+					node.parent.parent.color = RED;
+					rotateRight(node.parent.parent);
+				}
+			} else {
+				Node aunt = node.parent.parent.left;
+				if(aunt != null && aunt.color == RED){
+					node.parent.parent.color = RED;
+					node.parent.color = BLACK;
+					aunt.color = BLACK;
+					node = node.parent.parent;
+				} else {
+					if(node == node.parent.left){
+						node = node.parent;
+						rotateRight(node);
+					}
+					node.parent.color = BLACK;
+					node.parent.parent.color = RED;
+					rotateLeft(node.parent.parent);
+				}
+			}
+		}
+		root.color = BLACK;
 	}
 
 	// Links-Rotation
@@ -64,6 +130,35 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+		
+		Node child;
+		if(node == null){
+			return;
+		}
+
+		child = node.right;
+		if(child == null) {
+			return;
+		}
+
+		node.right = child.left;
+		if(child.left != null){
+			child.left.parent = node;
+		}
+
+		child.parent = node.parent;
+		if(node == root){
+			root = child;
+		} else if(node == node.parent.left){
+			node.parent.left = child;
+		} else {
+			node.parent.right = child;
+		}
+
+		child.left = node;
+		node.parent = child;
+		System.out.println("Fuehre Links-Rotation durch bei Knoten: " + node.value);
+		
 	}
 
 	// Rechts-Rotation
@@ -74,6 +169,33 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+		Node child;
+		if(node == null){
+			return;
+		}
+
+		child = node.left;
+		if(child == null) {
+			return;
+		}
+
+		node.right = child.right;
+		if(child.right != null){
+			child.right.parent = node;
+		}
+
+		child.parent = node.parent;
+		if(node == root){
+			root = child;
+		} else if(node == node.parent.left){
+			node.parent.left = child;
+		} else {
+			node.parent.right = child;
+		}
+
+		child.right = node;
+		node.parent = child;
+		System.out.println("Fuehre Rechts-Rotation durch bei Knoten: " + node.value);
 	}
 
 	// In-Order Traversierung mit Ausgabe der Farben
@@ -85,6 +207,13 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
+		if (node == null) {
+            return;
+        }
+        inOrderTraversal(node.left);
+		String color = node.color == RED? "rot" : "schwarz";
+        System.out.print("( " + node.value + ", " + color + " )");
+        inOrderTraversal(node.right);
 	}
 
     // Gibt die Höhe des Baums zurück
@@ -95,7 +224,13 @@ class B8A2 {
 		// Ersetzen Sie diese Kommentarzeile durch Ihren Code!
 
 		/**********************************************************/
-		return -1;
+		if (node == null) {
+            return 0;
+        } else {
+            int left = height(node.left);
+            int right = height(node.right);
+            return 1 + Math.max(left, right);
+        }
 	}
 
 	// Hauptmethode
